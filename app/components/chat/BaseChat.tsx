@@ -1,4 +1,4 @@
-import type { UIMessage as Message } from 'ai';
+import type { Message } from 'ai';
 import React, { type RefCallback } from 'react';
 import { ClientOnly } from '~/components/ClientOnly';
 import { Menu } from '~/components/sidebar/Menu.client';

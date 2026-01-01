@@ -11,7 +11,7 @@
     "unocss:watch": "unocss \"**/*.{html,js,ts,jsx,tsx}\" -o app/uno.css --watch"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.2",
+    "@ai-sdk/anthropic": "^0.0.39",
     "@ai-sdk/react": "^3.0.5",
     "@babel/runtime": "^7.28.4",
     "@codemirror/autocomplete": "^6.20.0",
@@ -68,6 +68,7 @@
   "devDependencies": {
     "@iconify/utils": "^3.1.0",
     "@types/node": "^20",
+    "@types/path-browserify": "^1.0.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@unocss/cli": "^66.5.12",

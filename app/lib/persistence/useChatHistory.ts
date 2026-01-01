@@ -1,7 +1,7 @@
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { atom } from 'nanostores';
-import type { UIMessage as Message } from 'ai';
+import type { Message } from 'ai';
 import { toast } from 'react-toastify';
 import { workbenchStore } from '~/lib/stores/workbench';
 import {

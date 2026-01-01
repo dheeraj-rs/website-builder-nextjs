@@ -1,4 +1,4 @@
-import { streamText as _streamText, convertToModelMessages } from 'ai';
+import { streamText as _streamText, convertToCoreMessages } from 'ai';
 import { getAPIKey, getGoogleAPIKey } from '~/lib/.server/llm/api-key';
 import { getAnthropicModel } from '~/lib/.server/llm/model';
 import { MAX_TOKENS } from './constants';
@@ -119,7 +119,7 @@ export async function streamText(
   const result = await _streamText({
     model,
     system: getSystemPrompt(),
-    messages: await convertToModelMessages(messages as any),
+    messages: convertToCoreMessages(messages as any),
     ...restOptions,
   });
 
