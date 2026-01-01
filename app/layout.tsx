@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import './uno.css';
+
 import { stripIndents } from '~/utils/stripIndent';
-import '~/styles/index.scss';
+import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import '@xterm/xterm/css/xterm.css';
 

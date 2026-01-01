@@ -3,12 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run unocss:watch & next dev --webpack",
-    "build": "npm run unocss:build && next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint",
-    "unocss:build": "unocss \"**/*.{html,js,ts,jsx,tsx}\" -o app/uno.css",
-    "unocss:watch": "unocss \"**/*.{html,js,ts,jsx,tsx}\" -o app/uno.css --watch"
+    "lint": "eslint"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.39",
@@ -35,6 +33,7 @@
     "@codemirror/state": "^6.5.3",
     "@codemirror/view": "^6.39.8",
     "@google/genai": "^1.34.0",
+    "@iconify/react": "^6.0.2",
     "@lezer/highlight": "^1.2.3",
     "@nanostores/react": "^1.0.0",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -67,18 +66,20 @@
   },
   "devDependencies": {
     "@iconify/utils": "^3.1.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
     "@types/path-browserify": "^1.0.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@unocss/cli": "^66.5.12",
-    "@unocss/webpack": "^66.5.12",
+    "autoprefixer": "^10.4.23",
     "buffer": "^6.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "path-browserify": "^1.0.1",
+    "postcss": "^8.5.6",
     "sass": "^1.97.1",
-    "typescript": "^5",
-    "unocss": "^66.5.12"
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5"
   }
 }

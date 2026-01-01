@@ -13,8 +13,14 @@ const highlighterOptions = {
   themes: ['light-plus', 'dark-plus'],
 };
 
-const shellHighlighter: HighlighterGeneric<BundledLanguage, BundledTheme> =
-  await createHighlighter(highlighterOptions);
+let highlighterPromise: Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> | undefined;
+
+const getHighlighter = () => {
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighter(highlighterOptions);
+  }
+  return highlighterPromise;
+};
 
 interface ArtifactProps {
   messageId: string;
@@ -103,14 +109,26 @@ interface ShellCodeBlockProps {
 }
 
 function ShellCodeBlock({ classsName, code }: ShellCodeBlockProps) {
+  const [html, setHtml] = useState<string>('');
+
+  useEffect(() => {
+    getHighlighter().then((highlighter) => {
+      setHtml(highlighter.codeToHtml(code, {
+        lang: 'shell',
+        theme: 'dark-plus',
+      }));
+    });
+  }, [code]);
+
+  if (!html) {
+    return <div className={classNames('text-xs font-mono opacity-50', classsName)}>{code}</div>;
+  }
+
   return (
     <div
       className={classNames('text-xs', classsName)}
       dangerouslySetInnerHTML={{
-        __html: shellHighlighter.codeToHtml(code, {
-          lang: 'shell',
-          theme: 'dark-plus',
-        }),
+        __html: html,
       }}
     ></div>
   );

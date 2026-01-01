@@ -23,7 +23,17 @@ export interface ChatHistoryItem {
 const persistenceEnabled =
   typeof window !== 'undefined' && !process.env.NEXT_PUBLIC_DISABLE_PERSISTENCE;
 
-export const db = persistenceEnabled ? await openDatabase() : undefined;
+let dbPromise: Promise<IDBDatabase | undefined> | undefined;
+
+export const getDb = async () => {
+  if (!persistenceEnabled) {
+    return undefined;
+  }
+  if (!dbPromise) {
+    dbPromise = openDatabase();
+  }
+  return dbPromise;
+};
 
 export const chatId = atom<string | undefined>(undefined);
 export const description = atom<string | undefined>(undefined);
@@ -38,48 +48,53 @@ export function useChatHistory() {
   const [urlId, setUrlId] = useState<string | undefined>();
 
   useEffect(() => {
-    if (!db) {
-      setReady(true);
+    const init = async () => {
+      const dbInstance = await getDb();
+      if (!dbInstance) {
+        setReady(true);
 
-      if (persistenceEnabled) {
-        toast.error(`Chat persistence is unavailable`);
+        if (persistenceEnabled) {
+          toast.error(`Chat persistence is unavailable`);
+        }
+
+        return;
       }
 
-      return;
-    }
+      if (mixedId) {
+        getMessages(dbInstance, mixedId)
+          .then((storedMessages) => {
+            if (storedMessages && storedMessages.messages.length > 0) {
+              setInitialMessages(storedMessages.messages);
+              setUrlId(storedMessages.urlId);
+              description.set(storedMessages.description);
+              chatId.set(storedMessages.id);
+            } else {
+              router.replace('/');
+            }
 
-    if (mixedId) {
-      getMessages(db, mixedId)
-        .then((storedMessages) => {
-          if (storedMessages && storedMessages.messages.length > 0) {
-            setInitialMessages(storedMessages.messages);
-            setUrlId(storedMessages.urlId);
-            description.set(storedMessages.description);
-            chatId.set(storedMessages.id);
-          } else {
-            router.replace('/');
-          }
-
-          setReady(true);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    }
+            setReady(true);
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          });
+      }
+    };
+    init();
   }, []);
 
   return {
     ready: !mixedId || ready,
     initialMessages,
     storeMessageHistory: async (messages: Message[]) => {
-      if (!db || messages.length === 0) {
+      const dbInstance = await getDb();
+      if (!dbInstance || messages.length === 0) {
         return;
       }
 
       const { firstArtifact } = workbenchStore;
 
       if (!urlId && firstArtifact?.id) {
-        const urlId = await getUrlId(db, firstArtifact.id);
+        const urlId = await getUrlId(dbInstance, firstArtifact.id);
 
         navigateChat(urlId);
         setUrlId(urlId);
@@ -90,7 +105,7 @@ export function useChatHistory() {
       }
 
       if (initialMessages.length === 0 && !chatId.get()) {
-        const nextId = await getNextId(db);
+        const nextId = await getNextId(dbInstance);
 
         chatId.set(nextId);
 
@@ -100,7 +115,7 @@ export function useChatHistory() {
       }
 
       await setMessages(
-        db,
+        dbInstance,
         chatId.get() as string,
         messages,
         urlId,

@@ -9,8 +9,6 @@ import { Messages } from './Messages.client';
 import { ModelSelector, type ModelProvider } from './ModelSelector';
 import { SendButton } from './SendButton.client';
 
-import styles from './BaseChat.module.scss';
-
 interface BaseChatProps {
   textareaRef?: React.RefObject<HTMLTextAreaElement> | undefined;
   messageRef?: RefCallback<HTMLDivElement> | undefined;
@@ -68,14 +66,27 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       <div
         ref={ref}
         className={classNames(
-          styles.BaseChat,
           'relative flex h-full w-full overflow-hidden bg-builder-elements-background-depth-1',
         )}
         data-chat-visible={showChat}
+        style={
+          {
+            '--workbench-inner-width': showChat ? undefined : '100%',
+            '--workbench-left': showChat ? undefined : '0',
+          } as React.CSSProperties
+        }
       >
         <ClientOnly>{() => <Menu />}</ClientOnly>
         <div ref={scrollRef} className="flex overflow-y-auto w-full h-full">
-          <div className={classNames(styles.Chat, 'flex flex-col flex-grow min-w-[var(--chat-min-width)] h-full')}>
+          <div
+            className={classNames(
+              'flex flex-col flex-grow min-w-[var(--chat-min-width)] h-full',
+              'transition-all duration-300 ease-in-out',
+              {
+                '-translate-x-1/2 opacity-0': !showChat,
+              },
+            )}
+          >
             {!chatStarted && (
               <div id="intro" className="mt-[26vh] max-w-chat mx-auto">
                 <h1 className="text-5xl text-center font-bold text-builder-elements-textPrimary mb-2">

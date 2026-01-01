@@ -3,8 +3,6 @@ import { bundledLanguages, codeToHtml, isSpecialLang, type BundledLanguage, type
 import { classNames } from '~/utils/classNames';
 import { createScopedLogger } from '~/utils/logger';
 
-import styles from './CodeBlock.module.scss';
-
 const logger = createScopedLogger('CodeBlock');
 
 interface CodeBlockProps {
@@ -52,7 +50,6 @@ export const CodeBlock = memo(
       <div className={classNames('relative group text-left', className)}>
         <div
           className={classNames(
-            styles.CopyButtonContainer,
             'bg-white absolute top-[10px] right-[10px] rounded-md z-10 text-lg flex items-center justify-center opacity-0 group-hover:opacity-100',
             {
               'rounded-l-0 opacity-100': copied,
@@ -62,7 +59,9 @@ export const CodeBlock = memo(
           {!disableCopy && (
             <button
               className={classNames(
-                'flex items-center bg-transparent p-[6px] justify-center before:bg-white before:rounded-l-md before:text-gray-500 before:border-r before:border-gray-300',
+                'flex items-center bg-transparent p-[6px] justify-center',
+                'before:content-["Copied"] before:absolute before:-left-[53px] before:text-xs before:h-[30px] before:px-1.5 before:py-0.5',
+                'before:bg-white before:rounded-l-md before:text-gray-500 before:border-r before:border-gray-300',
                 {
                   'before:opacity-0': !copied,
                   'before:opacity-100': copied,
