@@ -1,0 +1,8 @@
+
+> website-builder-nextjs@0.1.0 build
+> npm run unocss:build && next build
+
+
+> website-builder-nextjs@0.1.0 unocss:build
+> unocss "**/*.{html,js,ts,jsx,tsx}" -o app/uno.css
+
