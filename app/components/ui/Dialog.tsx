@@ -52,11 +52,11 @@ export const DialogButton = memo(({ type, children, onClick }: DialogButtonProps
       className={classNames(
         'inline-flex h-[35px] items-center justify-center rounded-lg px-4 text-sm leading-none focus:outline-none',
         {
-          'bg-builder-elements-button-primary-background text-builder-elements-button-primary-text hover:bg-builder-elements-button-primary-backgroundHover':
+          'bg-blue-500 text-white hover:bg-blue-600':
             type === 'primary',
-          'bg-builder-elements-button-secondary-background text-builder-elements-button-secondary-text hover:bg-builder-elements-button-secondary-backgroundHover':
+          'bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-zinc-700':
             type === 'secondary',
-          'bg-builder-elements-button-danger-background text-builder-elements-button-danger-text hover:bg-builder-elements-button-danger-backgroundHover':
+          'bg-red-500 text-white hover:bg-red-600':
             type === 'danger',
         },
       )}
@@ -71,7 +71,7 @@ export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.
   return (
     <RadixDialog.Title
       className={classNames(
-        'px-5 py-4 flex items-center justify-between border-b border-builder-elements-borderColor text-lg font-semibold leading-6 text-builder-elements-textPrimary',
+        'px-5 py-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100',
         className,
       )}
       {...props}
@@ -84,7 +84,7 @@ export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.
 export const DialogDescription = memo(({ className, children, ...props }: RadixDialog.DialogDescriptionProps) => {
   return (
     <RadixDialog.Description
-      className={classNames('px-5 py-4 text-builder-elements-textPrimary text-md', className)}
+      className={classNames('px-5 py-4 text-gray-600 dark:text-gray-400 text-md', className)}
       {...props}
     >
       {children}
@@ -114,7 +114,7 @@ export const Dialog = memo(({ className, children, onBackdrop, onClose }: Dialog
       <RadixDialog.Content asChild>
         <motion.div
           className={classNames(
-            'fixed top-[50%] left-[50%] z-max max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] border border-builder-elements-borderColor rounded-lg bg-builder-elements-background-depth-2 shadow-lg focus:outline-none overflow-hidden',
+            'fixed top-[50%] left-[50%] z-max max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-zinc-900 shadow-xl focus:outline-none overflow-hidden',
             className,
           )}
           initial="closed"
@@ -124,7 +124,7 @@ export const Dialog = memo(({ className, children, onBackdrop, onClose }: Dialog
         >
           {children}
           <RadixDialog.Close asChild onClick={onClose}>
-            <IconButton icon="i-ph:x" className="absolute top-[10px] right-[10px]" />
+            <IconButton icon="ph:x" className="absolute top-[10px] right-[10px]" />
           </RadixDialog.Close>
         </motion.div>
       </RadixDialog.Content>

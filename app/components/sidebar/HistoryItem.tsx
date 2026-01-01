@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useEffect, useRef, useState } from 'react';
 import { type ChatHistoryItem } from '~/lib/persistence';
@@ -38,22 +39,24 @@ export function HistoryItem({ item, onDelete }: HistoryItemProps) {
   return (
     <div
       ref={hoverRef}
-      className="group rounded-md text-builder-elements-textSecondary hover:text-builder-elements-textPrimary hover:bg-builder-elements-background-depth-3 overflow-hidden flex justify-between items-center px-2 py-1"
+      className="group rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-800 overflow-hidden flex justify-between items-center px-2 py-1"
     >
       <a href={`/chat/${item.urlId}`} className="flex w-full relative truncate block">
         {item.description}
-        <div className="absolute right-0 z-1 top-0 bottom-0 bg-gradient-to-l from-builder-elements-background-depth-2 group-hover:from-builder-elements-background-depth-3 to-transparent w-10 flex justify-end group-hover:w-15 group-hover:from-45%">
+        <div className="absolute right-0 z-1 top-0 bottom-0 bg-gradient-to-l from-gray-50 group-hover:from-gray-100 dark:from-zinc-950 dark:group-hover:from-zinc-900 to-transparent w-10 flex justify-end group-hover:w-15 group-hover:from-45%">
           {hovering && (
-            <div className="flex items-center p-1 text-builder-elements-textSecondary hover:text-builder-elements-item-contentDanger">
+            <div className="flex items-center p-1 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400">
               <Dialog.Trigger asChild>
                 <button
-                  className="i-ph:trash scale-110"
+                  className="scale-110"
                   onClick={(event) => {
                     // we prevent the default so we don't trigger the anchor above
                     event.preventDefault();
                     onDelete?.(event);
                   }}
-                />
+                >
+                  <Icon icon="ph:trash" />
+                </button>
               </Dialog.Trigger>
             </div>
           )}

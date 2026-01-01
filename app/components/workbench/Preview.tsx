@@ -1,4 +1,5 @@
 import { useStore } from '@nanostores/react';
+import { Icon } from '@iconify/react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { IconButton } from '~/components/ui/IconButton';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -80,11 +81,10 @@ export const Preview = memo(() => {
       {isPortDropdownOpen && (
         <div className="z-iframe-overlay w-full h-full absolute" onClick={() => setIsPortDropdownOpen(false)} />
       )}
-      <div className="bg-builder-elements-background-depth-2 p-2 flex items-center gap-1.5">
-        <IconButton icon="i-ph:arrow-clockwise" onClick={reloadPreview} />
+      <div className="bg-gray-50 dark:bg-zinc-900 p-2 flex items-center gap-1.5">
+        <IconButton icon="ph:arrow-clockwise" onClick={reloadPreview} />
         <div
-          className="flex items-center gap-1 flex-grow bg-builder-elements-preview-addressBar-background border border-builder-elements-borderColor text-builder-elements-preview-addressBar-text rounded-full px-3 py-1 text-sm hover:bg-builder-elements-preview-addressBar-backgroundHover hover:focus-within:bg-builder-elements-preview-addressBar-backgroundActive focus-within:bg-builder-elements-preview-addressBar-backgroundActive
-        focus-within-border-builder-elements-borderColorActive focus-within:text-builder-elements-preview-addressBar-textActive"
+          className="flex items-center gap-1 flex-grow bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 rounded-full px-3 py-1 text-sm hover:bg-gray-200 dark:hover:bg-zinc-700 focus-within:border-blue-500 focus-within:text-gray-900 dark:focus-within:text-gray-100 transition-colors"
         >
           <input
             ref={inputRef}
@@ -116,7 +116,7 @@ export const Preview = memo(() => {
           />
         )}
       </div>
-      <div className="flex-1 border-t border-builder-elements-borderColor">
+      <div className="flex-1 border-t border-gray-200 dark:border-gray-800">
         {activePreview ? (
           <iframe
             ref={iframeRef}

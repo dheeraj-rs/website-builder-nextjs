@@ -1,4 +1,5 @@
 import { useStore } from '@nanostores/react';
+import { Icon } from '@iconify/react';
 import type { Message } from 'ai';
 import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
@@ -33,7 +34,7 @@ export function Chat() {
         closeButton={({ closeToast }) => {
           return (
             <button className="Toastify__close-button" onClick={closeToast}>
-              <div className="i-ph:x text-lg" />
+              <Icon icon="ph:x" className="text-lg" />
             </button>
           );
         }}
@@ -43,10 +44,10 @@ export function Chat() {
            */
           switch (type) {
             case 'success': {
-              return <div className="i-ph:check-bold text-builder-elements-icon-success text-2xl" />;
+              return <Icon icon="ph:check-bold" className="text-green-500 text-2xl" />;
             }
             case 'error': {
-              return <div className="i-ph:warning-circle-bold text-builder-elements-icon-error text-2xl" />;
+              return <Icon icon="ph:warning-circle-bold" className="text-red-500 text-2xl" />;
             }
           }
 

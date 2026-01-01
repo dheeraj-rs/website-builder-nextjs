@@ -1,4 +1,5 @@
 import { useStore } from '@nanostores/react';
+import { Icon } from '@iconify/react';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
@@ -127,9 +128,9 @@ export const EditorPanel = memo(
         <Panel defaultSize={showTerminal ? DEFAULT_EDITOR_SIZE : 100} minSize={20}>
           <PanelGroup direction="horizontal">
             <Panel defaultSize={20} minSize={10} collapsible>
-              <div className="flex flex-col border-r border-builder-elements-borderColor h-full">
+              <div className="flex flex-col border-r border-gray-200 dark:border-gray-800 h-full">
                 <PanelHeader>
-                  <div className="i-ph:tree-structure-duotone shrink-0" />
+                  <Icon icon="ph:tree-structure-duotone" className="shrink-0 text-lg" />
                   Files
                 </PanelHeader>
                 <FileTree
@@ -152,11 +153,11 @@ export const EditorPanel = memo(
                     {activeFileUnsaved && (
                       <div className="flex gap-1 ml-auto -mr-1.5">
                         <PanelHeaderButton onClick={onFileSave}>
-                          <div className="i-ph:floppy-disk-duotone" />
+                          <Icon icon="ph:floppy-disk-duotone" />
                           Save
                         </PanelHeaderButton>
                         <PanelHeaderButton onClick={onFileReset}>
-                          <div className="i-ph:clock-counter-clockwise-duotone" />
+                          <Icon icon="ph:clock-counter-clockwise-duotone" />
                           Reset
                         </PanelHeaderButton>
                       </div>
@@ -197,8 +198,8 @@ export const EditorPanel = memo(
           }}
         >
           <div className="h-full">
-            <div className="bg-builder-elements-terminals-background h-full flex flex-col">
-              <div className="flex items-center bg-builder-elements-background-depth-2 border-y border-builder-elements-borderColor gap-1.5 min-h-[34px] p-2">
+            <div className="bg-white dark:bg-zinc-900 h-full flex flex-col">
+              <div className="flex items-center bg-gray-50 dark:bg-zinc-900 border-y border-gray-200 dark:border-gray-800 gap-1.5 min-h-[34px] p-2">
                 {Array.from({ length: terminalCount }, (_, index) => {
                   const isActive = activeTerminal === index;
 
@@ -206,24 +207,25 @@ export const EditorPanel = memo(
                     <button
                       key={index}
                       className={classNames(
-                        'flex items-center text-sm cursor-pointer gap-1.5 px-3 py-2 h-full whitespace-nowrap rounded-full',
+                        'flex items-center text-sm cursor-pointer gap-1.5 px-3 py-2 h-full whitespace-nowrap rounded-full transition-colors',
                         {
-                          'bg-builder-elements-terminals-buttonBackground text-builder-elements-textPrimary': isActive,
-                          'bg-builder-elements-background-depth-2 text-builder-elements-textSecondary hover:bg-builder-elements-terminals-buttonBackground':
-                            !isActive,
+                          'bg-blue-500/10 text-blue-500': isActive,
+                          'bg-transparent text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800': !isActive,
                         },
                       )}
                       onClick={() => setActiveTerminal(index)}
                     >
-                      <div className="i-ph:terminal-window-duotone text-lg" />
+                      <Icon icon="ph:terminal-window-duotone" className="text-lg" />
                       Terminal {terminalCount > 1 && index + 1}
                     </button>
                   );
                 })}
-                {terminalCount < MAX_TERMINALS && <IconButton icon="i-ph:plus" size="md" onClick={addTerminal} />}
+                {terminalCount < MAX_TERMINALS && (
+                  <IconButton icon="ph:plus" size="md" onClick={addTerminal} />
+                )}
                 <IconButton
                   className="ml-auto"
-                  icon="i-ph:caret-down"
+                  icon="ph:caret-down"
                   title="Close"
                   size="md"
                   onClick={() => workbenchStore.toggleTerminal(false)}

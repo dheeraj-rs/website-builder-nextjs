@@ -59,7 +59,7 @@ export const Markdown = memo(({ children, html = false, limitedMarkdown = false 
   }, []);
 
   return (
-    <div className="prose prose-zinc dark:prose-invert max-w-none prose-pre:bg-transparent prose-pre:p-0 prose-code:bg-[var(--builder-elements-messages-inlineCode-background)] prose-code:text-[var(--builder-elements-messages-inlineCode-text)] prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none">
+    <div className="prose prose-zinc dark:prose-invert max-w-none prose-pre:bg-transparent prose-pre:p-0 prose-code:bg-gray-200 dark:prose-code:bg-zinc-700 prose-code:text-gray-900 dark:prose-code:text-gray-100 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none">
       <ReactMarkdown
         allowedElements={allowedHTMLElements}
         components={components}

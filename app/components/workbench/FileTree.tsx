@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { memo, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { FileMap } from '~/lib/stores/files';
 import { classNames } from '~/utils/classNames';
@@ -163,17 +164,24 @@ function Folder({ folder: { depth, name }, collapsed, selected = false, onClick 
   return (
     <NodeButton
       className={classNames('group', {
-        'bg-transparent text-builder-elements-item-contentDefault hover:text-builder-elements-item-contentActive hover:bg-builder-elements-item-backgroundActive':
+        'bg-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-800':
           !selected,
-        'bg-builder-elements-item-backgroundAccent text-builder-elements-item-contentAccent': selected,
+        'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400': selected,
       })}
       depth={depth}
       iconClasses={classNames({
-        'i-ph:caret-right scale-98': collapsed,
-        'i-ph:caret-down scale-98': !collapsed,
+        'scale-98': collapsed,
+        'scale-98': !collapsed,
       })}
       onClick={onClick}
     >
+      <Icon
+        icon={collapsed ? 'ph:caret-right' : 'ph:caret-down'}
+        className={classNames('scale-98', {
+          'text-gray-500 dark:text-gray-400': !selected,
+          'text-blue-600 dark:text-blue-400': selected,
+        })}
+      />
       {name}
     </NodeButton>
   );
@@ -190,22 +198,29 @@ function File({ file: { depth, name }, onClick, selected, unsavedChanges = false
   return (
     <NodeButton
       className={classNames('group', {
-        'bg-transparent hover:bg-builder-elements-item-backgroundActive text-builder-elements-item-contentDefault': !selected,
-        'bg-builder-elements-item-backgroundAccent text-builder-elements-item-contentAccent': selected,
+        'bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-gray-400': !selected,
+        'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400': selected,
       })}
       depth={depth}
-      iconClasses={classNames('i-ph:file-duotone scale-98', {
-        'group-hover:text-builder-elements-item-contentActive': !selected,
+      iconClasses={classNames('scale-98', {
+        'group-hover:text-gray-900 dark:group-hover:text-gray-100': !selected,
       })}
       onClick={onClick}
     >
+      <Icon
+        icon="ph:file-duotone"
+        className={classNames('scale-98', {
+          'text-gray-500 dark:text-gray-400': !selected,
+          'text-blue-600 dark:text-blue-400': selected,
+        })}
+      />
       <div
         className={classNames('flex items-center', {
-          'group-hover:text-builder-elements-item-contentActive': !selected,
+          'group-hover:text-gray-900 dark:group-hover:text-gray-100': !selected,
         })}
       >
         <div className="flex-1 truncate pr-2">{name}</div>
-        {unsavedChanges && <span className="i-ph:circle-fill scale-68 shrink-0 text-orange-500" />}
+        {unsavedChanges && <span className="scale-68 shrink-0 text-orange-500 w-2 h-2 rounded-full bg-orange-500" />}
       </div>
     </NodeButton>
   );
@@ -229,8 +244,8 @@ function NodeButton({ depth, iconClasses, onClick, className, children }: Button
       style={{ paddingLeft: `${6 + depth * NODE_PADDING_LEFT}px` }}
       onClick={() => onClick?.()}
     >
-      <div className={classNames('scale-120 shrink-0', iconClasses)}></div>
-      <div className="truncate w-full text-left">{children}</div>
+      <div className={classNames('scale-120 shrink-0 flex items-center justify-center', iconClasses)}></div>
+      <div className="truncate w-full text-left flex items-center gap-2">{children}</div>
     </button>
   );
 }

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { memo } from 'react';
 import { classNames } from '~/utils/classNames';
 
@@ -40,7 +41,7 @@ export const IconButton = memo(
     return (
       <button
         className={classNames(
-          'flex items-center text-builder-elements-item-contentDefault bg-transparent enabled:hover:text-builder-elements-item-contentActive rounded-md p-1 enabled:hover:bg-builder-elements-item-backgroundActive disabled:cursor-not-allowed',
+          'flex items-center text-gray-500 dark:text-gray-400 bg-transparent enabled:hover:text-gray-700 dark:enabled:hover:text-gray-200 rounded-md p-1 enabled:hover:bg-gray-100 dark:enabled:hover:bg-zinc-800 disabled:cursor-not-allowed',
           {
             [classNames('opacity-30', disabledClassName)]: disabled,
           },
@@ -56,7 +57,11 @@ export const IconButton = memo(
           onClick?.(event);
         }}
       >
-        {children ? children : <div className={classNames(icon, getIconSize(size), iconClassName)}></div>}
+        {children ? (
+          children
+        ) : (
+          <Icon icon={icon} className={classNames(getIconSize(size), iconClassName)} />
+        )}
       </button>
     );
   },

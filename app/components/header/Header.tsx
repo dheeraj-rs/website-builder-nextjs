@@ -1,6 +1,7 @@
 'use client';
 
 import { useStore } from '@nanostores/react';
+import { Icon } from '@iconify/react';
 import { chatStore } from '~/lib/stores/chat';
 import { description } from '~/lib/persistence/useChatHistory';
 import { classNames } from '~/utils/classNames';
@@ -13,20 +14,20 @@ export function Header() {
   return (
     <header
       className={classNames(
-        'flex items-center bg-builder-background-primary p-5 border-b h-[var(--header-height)]',
+        'fixed top-0 left-0 right-0 w-full z-30 flex items-center bg-white dark:bg-zinc-900 key-border-b h-[var(--header-height)] p-5 border-b',
         {
           'border-transparent': !chat.showChat,
-          'border-builder-border-secondary': chat.showChat,
+          'border-gray-200 dark:border-gray-800': chat.showChat,
         },
       )}
     >
       <div className="flex items-center gap-2">
-        <div className="i-ph:sidebar-simple-duotone text-xl text-builder-text-tertiary" />
+        <Icon icon="ph:sidebar-simple-duotone" className="text-xl text-gray-500" />
       </div>
 
       {chat.started && (
         <>
-          <span className="flex-1 px-4 truncate text-center text-builder-elements-textPrimary">
+          <span className="flex-1 px-4 truncate text-center text-gray-900 dark:text-gray-100">
             {chatDescription}
           </span>
           <HeaderActionButtons />

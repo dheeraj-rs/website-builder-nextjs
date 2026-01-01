@@ -1,4 +1,5 @@
 import { useStore } from '@nanostores/react';
+import { Icon } from '@iconify/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { computed } from 'nanostores';
 import { memo, useEffect, useRef, useState } from 'react';
@@ -51,21 +52,21 @@ export const Artifact = memo(({ messageId }: ArtifactProps) => {
   }, [actions]);
 
   return (
-    <div className="artifact border border-builder-elements-borderColor flex flex-col overflow-hidden rounded-lg w-full transition-border duration-150">
+    <div className="artifact border border-gray-200 dark:border-gray-800 flex flex-col overflow-hidden rounded-lg w-full transition-colors duration-150">
       <div className="flex">
         <button
-          className="flex items-stretch bg-builder-elements-artifacts-background hover:bg-builder-elements-artifacts-backgroundHover w-full overflow-hidden"
+          className="flex items-stretch bg-gray-50 dark:bg-zinc-900 hover:bg-gray-100 dark:hover:bg-zinc-800 w-full overflow-hidden transition-colors"
           onClick={() => {
             const showWorkbench = workbenchStore.showWorkbench.get();
             workbenchStore.showWorkbench.set(!showWorkbench);
           }}
         >
           <div className="px-5 p-3.5 w-full text-left">
-            <div className="w-full text-builder-elements-textPrimary font-medium leading-5 text-sm">{artifact?.title}</div>
-            <div className="w-full w-full text-builder-elements-textSecondary text-xs mt-0.5">Click to open Workbench</div>
+            <div className="w-full text-gray-900 dark:text-gray-100 font-medium leading-5 text-sm">{artifact?.title}</div>
+            <div className="w-full w-full text-gray-500 dark:text-gray-400 text-xs mt-0.5">Click to open Workbench</div>
           </div>
         </button>
-        <div className="bg-builder-elements-artifacts-borderColor w-[1px]" />
+        <div className="bg-gray-200 dark:bg-gray-800 w-px" />
         <AnimatePresence>
           {actions.length && (
             <motion.button
@@ -73,11 +74,11 @@ export const Artifact = memo(({ messageId }: ArtifactProps) => {
               animate={{ width: 'auto' }}
               exit={{ width: 0 }}
               transition={{ duration: 0.15, ease: cubicEasingFn }}
-              className="bg-builder-elements-artifacts-background hover:bg-builder-elements-artifacts-backgroundHover"
+              className="bg-gray-50 dark:bg-zinc-900 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
               onClick={toggleActions}
             >
               <div className="p-4">
-                <div className={showActions ? 'i-ph:caret-up-bold' : 'i-ph:caret-down-bold'}></div>
+                <Icon icon={showActions ? 'ph:caret-up-bold' : 'ph:caret-down-bold'} className="text-gray-500 dark:text-gray-400" />
               </div>
             </motion.button>
           )}
@@ -92,8 +93,8 @@ export const Artifact = memo(({ messageId }: ArtifactProps) => {
             exit={{ height: '0px' }}
             transition={{ duration: 0.15 }}
           >
-            <div className="bg-builder-elements-artifacts-borderColor h-[1px]" />
-            <div className="p-5 text-left bg-builder-elements-actions-background">
+            <div className="bg-gray-200 dark:bg-gray-800 h-px" />
+            <div className="p-5 text-left bg-gray-50 dark:bg-zinc-900">
               <ActionList actions={actions} />
             </div>
           </motion.div>
@@ -165,19 +166,19 @@ const ActionList = memo(({ actions }: ActionListProps) => {
               <div className="flex items-center gap-1.5 text-sm">
                 <div className={classNames('text-lg', getIconColor(action.status))}>
                   {status === 'running' ? (
-                    <div className="i-svg-spinners:90-ring-with-bg"></div>
+                    <Icon icon="svg-spinners:90-ring-with-bg" />
                   ) : status === 'pending' ? (
-                    <div className="i-ph:circle-duotone"></div>
+                    <Icon icon="ph:circle-duotone" />
                   ) : status === 'complete' ? (
-                    <div className="i-ph:check"></div>
+                    <Icon icon="ph:check" />
                   ) : status === 'failed' || status === 'aborted' ? (
-                    <div className="i-ph:x"></div>
+                    <Icon icon="ph:x" />
                   ) : null}
                 </div>
                 {type === 'file' ? (
                   <div>
                     Create{' '}
-                    <code className="bg-builder-elements-artifacts-inlineCode-background text-builder-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md">
+                    <code className="bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400 px-1.5 py-1 rounded-md">
                       {action.filePath}
                     </code>
                   </div>
@@ -206,19 +207,19 @@ const ActionList = memo(({ actions }: ActionListProps) => {
 function getIconColor(status: ActionState['status']) {
   switch (status) {
     case 'pending': {
-      return 'text-builder-elements-textTertiary';
+      return 'text-gray-400 dark:text-gray-500';
     }
     case 'running': {
-      return 'text-builder-elements-loader-progress';
+      return 'text-blue-500';
     }
     case 'complete': {
-      return 'text-builder-elements-icon-success';
+      return 'text-green-500';
     }
     case 'aborted': {
-      return 'text-builder-elements-textSecondary';
+      return 'text-gray-400 dark:text-gray-500';
     }
     case 'failed': {
-      return 'text-builder-elements-icon-error';
+      return 'text-red-500';
     }
     default: {
       return undefined;

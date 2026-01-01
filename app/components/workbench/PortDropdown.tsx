@@ -48,16 +48,16 @@ export const PortDropdown = memo(
 
     return (
       <div className="relative z-port-dropdown" ref={dropdownRef}>
-        <IconButton icon="i-ph:plug" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+        <IconButton icon="ph:plug" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
         {isDropdownOpen && (
-          <div className="absolute right-0 mt-2 bg-builder-elements-background-depth-2 border border-builder-elements-borderColor rounded shadow-sm min-w-[140px] dropdown-animation">
-            <div className="px-4 py-2 border-b border-builder-elements-borderColor text-sm font-semibold text-builder-elements-textPrimary">
+          <div className="absolute right-0 mt-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-gray-800 rounded shadow-sm min-w-[140px] dropdown-animation">
+            <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-800 text-sm font-semibold text-gray-900 dark:text-gray-100">
               Ports
             </div>
             {sortedPreviews.map((preview) => (
               <div
                 key={preview.port}
-                className="flex items-center px-4 py-2 cursor-pointer hover:bg-builder-elements-item-backgroundActive"
+                className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800"
                 onClick={() => {
                   setActivePreviewIndex(preview.index);
                   setIsDropdownOpen(false);
@@ -67,8 +67,8 @@ export const PortDropdown = memo(
                 <span
                   className={
                     activePreviewIndex === preview.index
-                      ? 'text-builder-elements-item-contentAccent'
-                      : 'text-builder-elements-item-contentDefault group-hover:text-builder-elements-item-contentActive'
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200'
                   }
                 >
                   {preview.port}

@@ -1,11 +1,12 @@
 import { useStore } from '@nanostores/react';
+import { Icon } from '@iconify/react';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { classNames } from '~/utils/classNames';
 
-interface HeaderActionButtonsProps {}
+interface HeaderActionButtonsProps { }
 
-export function HeaderActionButtons({}: HeaderActionButtonsProps) {
+export function HeaderActionButtons({ }: HeaderActionButtonsProps) {
   const showWorkbench = useStore(workbenchStore.showWorkbench);
   const { showChat } = useStore(chatStore);
 
@@ -13,7 +14,7 @@ export function HeaderActionButtons({}: HeaderActionButtonsProps) {
 
   return (
     <div className="flex">
-      <div className="flex border border-builder-elements-borderColor rounded-md overflow-hidden">
+      <div className="flex border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden">
         <Button
           active={showChat}
           disabled={!canHideChat}
@@ -23,9 +24,9 @@ export function HeaderActionButtons({}: HeaderActionButtonsProps) {
             }
           }}
         >
-          <div className="i-bolt:chat text-sm" />
+          <Icon icon="ph:chat-circle-dots" className="text-sm" />
         </Button>
-        <div className="w-[1px] bg-builder-elements-borderColor" />
+        <div className="w-[1px] bg-gray-200 dark:bg-gray-800" />
         <Button
           active={showWorkbench}
           onClick={() => {
@@ -36,7 +37,7 @@ export function HeaderActionButtons({}: HeaderActionButtonsProps) {
             workbenchStore.showWorkbench.set(!showWorkbench);
           }}
         >
-          <div className="i-ph:code-bold" />
+          <Icon icon="ph:code-bold" />
         </Button>
       </div>
     </div>
@@ -54,10 +55,10 @@ function Button({ active = false, disabled = false, children, onClick }: ButtonP
   return (
     <button
       className={classNames('flex items-center p-1.5', {
-        'bg-builder-elements-item-backgroundDefault hover:bg-builder-elements-item-backgroundActive text-builder-elements-textTertiary hover:text-builder-elements-textPrimary':
-          !active,
-        'bg-builder-elements-item-backgroundAccent text-builder-elements-item-contentAccent': active && !disabled,
-        'bg-builder-elements-item-backgroundDefault text-alpha-gray-20 dark:text-alpha-white-20 cursor-not-allowed':
+        'bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100':
+          !active && !disabled,
+        'bg-blue-500/10 text-blue-500': active && !disabled,
+        'bg-transparent text-gray-300 dark:text-gray-700 cursor-not-allowed':
           disabled,
       })}
       onClick={onClick}
