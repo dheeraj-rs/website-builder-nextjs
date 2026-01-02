@@ -51,7 +51,7 @@ export async function streamText(
     // model: 'gemini-2.5-flash',
 
     const googleResult = await ai.models.generateContentStream({
-      model: 'gemini-flash-lite-latest',
+      model: 'gemini-2.5-flash',
       contents,
       config: {
         maxOutputTokens: MAX_TOKENS,

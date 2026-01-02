@@ -150,6 +150,60 @@ You are Bolt, an expert AI assistant and exceptional senior software developer w
       - Keep files as small as possible by extracting related functionalities into separate modules.
       - Use imports to connect these modules together effectively.
   </artifact_instructions>
+
+  <tailwind_css_setup>
+    CRITICAL: When creating projects that use Tailwind CSS, you MUST include the following setup:
+
+    1. Create a \`tailwind.config.js\` file with proper content configuration:
+       \`\`\`javascript
+       /** @type {import('tailwindcss').Config} */
+       export default {
+         content: [
+           "./index.html",
+           "./src/**/*.{js,ts,jsx,tsx}",
+         ],
+         theme: {
+           extend: {},
+         },
+         plugins: [],
+       }
+       \`\`\`
+
+    2. Create a CSS file (e.g., \`src/index.css\` or \`src/main.css\`) with Tailwind directives:
+       \`\`\`css
+       @tailwind base;
+       @tailwind components;
+       @tailwind utilities;
+       \`\`\`
+
+    3. Import the CSS file in your main JavaScript/TypeScript file (e.g., \`src/main.jsx\` or \`src/App.jsx\`):
+       \`\`\`javascript
+       import './index.css'
+       \`\`\`
+
+    4. Include Tailwind CSS and its dependencies in \`package.json\`:
+       \`\`\`json
+       {
+         "devDependencies": {
+           "tailwindcss": "^3.4.0",
+           "postcss": "^8.4.32",
+           "autoprefixer": "^10.4.16"
+         }
+       }
+       \`\`\`
+
+    5. Create a \`postcss.config.js\` file:
+       \`\`\`javascript
+       export default {
+         plugins: {
+           tailwindcss: {},
+           autoprefixer: {},
+         },
+       }
+       \`\`\`
+
+    IMPORTANT: ALL of these files are REQUIRED for Tailwind CSS to work properly. Missing any of these will result in unstyled output.
+  </tailwind_css_setup>
 </artifact_info>
 
 NEVER use the word "artifact". For example:

@@ -28,9 +28,11 @@ export class PreviewsStore {
     }
 
     webcontainer.on('port', (port, type, url) => {
+      console.log('[PreviewsStore] Port event:', { port, type, url });
       let previewInfo = this.#availablePreviews.get(port);
 
       if (type === 'close' && previewInfo) {
+        console.log('[PreviewsStore] Closing preview on port:', port);
         this.#availablePreviews.delete(port);
         this.previews.set(
           this.previews.get().filter((preview) => preview.port !== port)
@@ -42,6 +44,7 @@ export class PreviewsStore {
       const previews = this.previews.get();
 
       if (!previewInfo) {
+        console.log('[PreviewsStore] Creating new preview for port:', port);
         previewInfo = { port, ready: type === 'open', baseUrl: url };
         this.#availablePreviews.set(port, previewInfo);
         previews.push(previewInfo);
@@ -50,6 +53,7 @@ export class PreviewsStore {
       previewInfo.ready = type === 'open';
       previewInfo.baseUrl = url;
 
+      console.log('[PreviewsStore] Updated previews:', previews);
       this.previews.set([...previews]);
     });
   }
