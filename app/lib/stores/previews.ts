@@ -22,12 +22,19 @@ export class PreviewsStore {
   async #init() {
     const webcontainer = await this.#webcontainer;
 
+    if (!webcontainer) {
+      console.error('[PreviewsStore] WebContainer is undefined!');
+      return;
+    }
+
     webcontainer.on('port', (port, type, url) => {
       let previewInfo = this.#availablePreviews.get(port);
 
       if (type === 'close' && previewInfo) {
         this.#availablePreviews.delete(port);
-        this.previews.set(this.previews.get().filter((preview) => preview.port !== port));
+        this.previews.set(
+          this.previews.get().filter((preview) => preview.port !== port)
+        );
 
         return;
       }
