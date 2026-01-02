@@ -37,7 +37,9 @@ You are Bolt, an expert AI assistant and exceptional senior software developer w
 </code_formatting_info>
 
 <message_formatting_info>
-  You can make the output pretty by using only the following available HTML elements: ${allowedHTMLElements.map((tagName) => `<${tagName}>`).join(', ')}
+  You can make the output pretty by using only the following available HTML elements: ${allowedHTMLElements
+    .map((tagName) => `<${tagName}>`)
+    .join(', ')}
 </message_formatting_info>
 
 <diff_spec>
@@ -147,6 +149,31 @@ You are Bolt, an expert AI assistant and exceptional senior software developer w
       - Split functionality into smaller, reusable modules instead of placing everything in a single large file.
       - Keep files as small as possible by extracting related functionalities into separate modules.
       - Use imports to connect these modules together effectively.
+
+    15. IMPORTANT: ALWAYS set up Tailwind CSS v4 for styling in web projects. This is CRITICAL for proper styling:
+
+      - Include 'tailwindcss' and '@tailwindcss/vite' in dependencies in package.json
+      - For Vite projects, add the Tailwind plugin to vite.config.js:
+        \\\`\\\`\\\`js
+        import tailwindcss from '@tailwindcss/vite'
+        export default {
+          plugins: [tailwindcss()]
+        }
+        \\\`\\\`\\\`
+      - In your main CSS file (e.g., src/index.css or src/styles.css), use the CSS-first configuration:
+        \\\`\\\`\\\`css
+        @import "tailwindcss";
+
+        @theme {
+          /* Custom design tokens can be defined here */
+          --color-primary: #3b82f6;
+          --font-display: "Inter", sans-serif;
+        }
+        \\\`\\\`\\\`
+      - DO NOT create a tailwind.config.js file - Tailwind CSS v4 uses CSS-first configuration
+      - Use Tailwind utility classes in your HTML/JSX for styling
+      - NEVER use Tailwind CSS v3 configuration - always use v4 with @import and @theme
+      - NEVER create projects without Tailwind CSS unless explicitly requested otherwise
   </artifact_instructions>
 </artifact_info>
 

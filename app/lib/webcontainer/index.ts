@@ -1,39 +1,49 @@
 import { WebContainer } from '@webcontainer/api';
+import { WORK_DIR_NAME } from '~/utils/constants';
 
-export let webcontainer: Promise<WebContainer>;
+interface WebContainerContext {
+  loaded: boolean;
+}
+
+// Extend Window interface for HMR support
+declare global {
+  interface Window {
+    __webcontainerContext?: WebContainerContext;
+    __webcontainer?: Promise<WebContainer>;
+  }
+}
+
+// HMR support for development
+export const webcontainerContext: WebContainerContext =
+  typeof window !== 'undefined' && window.__webcontainerContext
+    ? window.__webcontainerContext
+    : { loaded: false };
+
+if (typeof window !== 'undefined') {
+  window.__webcontainerContext = webcontainerContext;
+}
+
+// Initialize with noop promise for SSR
+export let webcontainer: Promise<WebContainer> = new Promise(() => {
+  // noop for SSR
+});
 
 // Boot WebContainer only on client-side
-// Next.js: Use typeof window check instead of import.meta.env.SSR
 if (typeof window !== 'undefined') {
-  const WORK_DIR_NAME = 'project';
+  // HMR support - check for cached WebContainer
+  const cachedWebContainer = window.__webcontainer;
 
-  console.log('[WebContainer] Starting boot process...');
-  console.log(
-    '[WebContainer] crossOriginIsolated:',
-    window.crossOriginIsolated
-  );
-  console.log(
-    '[WebContainer] SharedArrayBuffer available:',
-    typeof SharedArrayBuffer !== 'undefined'
-  );
-
-  webcontainer = WebContainer.boot({ workdirName: WORK_DIR_NAME })
-    .then((instance) => {
-      console.log('[WebContainer] ✅ Boot successful!', instance);
-      // Expose globally for debugging
-      (window as any).webcontainerInstance = instance;
-      return instance;
-    })
-    .catch((error) => {
-      console.error('[WebContainer] ❌ Boot failed:', error);
-      console.error('[WebContainer] Error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
+  webcontainer =
+    cachedWebContainer ??
+    Promise.resolve()
+      .then(() => {
+        return WebContainer.boot({ workdirName: WORK_DIR_NAME });
+      })
+      .then((webcontainer) => {
+        webcontainerContext.loaded = true;
+        return webcontainer;
       });
-      throw error;
-    });
 
-  // Expose promise globally for debugging
-  (window as any).webcontainerPromise = webcontainer;
+  // Cache for HMR
+  window.__webcontainer = webcontainer;
 }
