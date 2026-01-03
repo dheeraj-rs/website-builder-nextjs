@@ -1,7 +1,8 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Critical: WebContainer requires these security headers
+  // Headers are now managed in vercel.json for deployment
+  // and applied here for local development
   async headers() {
     return [
       {
@@ -14,6 +15,10 @@ const nextConfig: NextConfig = {
           {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'cross-origin',
           },
         ],
       },
