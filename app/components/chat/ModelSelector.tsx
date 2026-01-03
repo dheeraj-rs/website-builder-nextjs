@@ -1,6 +1,6 @@
 import { classNames } from '~/utils/classNames';
 
-export type ModelProvider = 'anthropic' | 'google';
+export type ModelProvider = 'anthropic' | 'google' | 'openai';
 
 interface ModelSelectorProps {
   value: ModelProvider;
@@ -11,6 +11,7 @@ interface ModelSelectorProps {
 const MODELS = [
   { value: 'anthropic' as const, label: 'Claude Sonnet 4.5' },
   { value: 'google' as const, label: 'Gemini Flash Lite (Latest)' },
+  { value: 'openai' as const, label: 'OpenAI (GPT-4o)' },
 ];
 
 export function ModelSelector({ value, onChange, className }: ModelSelectorProps) {

@@ -169,10 +169,7 @@ function Folder({ folder: { depth, name }, collapsed, selected = false, onClick 
         'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400': selected,
       })}
       depth={depth}
-      iconClasses={classNames({
-        'scale-98': collapsed,
-        'scale-98': !collapsed,
-      })}
+      iconClasses="scale-98"
       onClick={onClick}
     >
       <Icon

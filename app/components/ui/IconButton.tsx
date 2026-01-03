@@ -60,7 +60,7 @@ export const IconButton = memo(
         {children ? (
           children
         ) : (
-          <Icon icon={icon} className={classNames(getIconSize(size), iconClassName)} />
+          icon && <Icon icon={icon} className={classNames(getIconSize(size), iconClassName)} />
         )}
       </button>
     );

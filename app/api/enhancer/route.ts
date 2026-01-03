@@ -1,14 +1,14 @@
 import { type NextRequest } from 'next/server';
 import { streamText } from '~/lib/.server/llm';
 
-export const runtime = 'edge';
-
 export async function POST(request: NextRequest) {
   const { message } = (await request.json()) as { message: string };
 
   const env = {
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    OPEN_AI: process.env.OPEN_AI,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   };
 
   try {

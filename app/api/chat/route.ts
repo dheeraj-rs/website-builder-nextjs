@@ -11,8 +11,6 @@ import {
 const CONTINUE_PROMPT =
   'Continue your response from exactly where you left off.';
 
-export const runtime = 'edge';
-
 export async function POST(request: NextRequest) {
   console.time('[API_CHAT] Total Request Time');
 
@@ -64,6 +62,8 @@ export async function POST(request: NextRequest) {
           ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
           GOOGLE_GENERATIVE_AI_API_KEY:
             process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+          OPEN_AI: process.env.OPEN_AI,
+          OPENAI_API_KEY: process.env.OPENAI_API_KEY,
         };
 
         const result = await streamText(
@@ -83,6 +83,8 @@ export async function POST(request: NextRequest) {
     const env = {
       ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
       GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+      OPEN_AI: process.env.OPEN_AI,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     };
 
     const result = await streamText(messages, env as any, provider, options);
