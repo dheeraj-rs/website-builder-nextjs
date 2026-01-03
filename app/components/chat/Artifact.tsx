@@ -189,12 +189,32 @@ const ActionList = memo(({ actions }: ActionListProps) => {
                 ) : null}
               </div>
               {type === 'shell' && (
-                <ShellCodeBlock
-                  classsName={classNames('mt-1', {
-                    'mb-3.5': !isLast,
-                  })}
-                  code={content}
-                />
+                <>
+                  <ShellCodeBlock
+                    classsName={classNames('mt-1', {
+                      'mb-3.5': !isLast && status !== 'failed',
+                    })}
+                    code={content}
+                  />
+                  {status === 'failed' && 'error' in action && action.error && (
+                    <div className="mt-2 mb-3.5 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                      <div className="flex items-start gap-2">
+                        <Icon icon="ph:warning-circle" className="text-red-500 text-lg mt-0.5 flex-shrink-0" />
+                        <div className="flex-1">
+                          <div className="text-xs font-medium text-red-700 dark:text-red-400 mb-1">
+                            Command Failed
+                          </div>
+                          <div className="text-xs text-red-600 dark:text-red-300">
+                            {action.error}
+                          </div>
+                          <div className="text-xs text-red-500 dark:text-red-400 mt-2 opacity-75">
+                            Check the terminal output above for details. The system will auto-retry if dependencies are missing.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </motion.li>
           );
