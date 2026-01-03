@@ -164,6 +164,9 @@ export class ActionRunner {
     let devServerStarted = false;
     let outputBuffer = '';
     let missingDependencyDetected = false;
+    let syntaxErrorDetected = false;
+    let buildErrorDetected = false;
+    let portConflictDetected = false;
 
     process.output.pipeTo(
       new WritableStream({
@@ -173,8 +176,24 @@ export class ActionRunner {
           const str = data.toString();
           outputBuffer += str.toLowerCase();
 
+          // Detect various error types
           if (str.includes('command not found') || str.includes('not found:')) {
             missingDependencyDetected = true;
+          }
+
+          if (str.match(/SyntaxError|Unexpected token|Parse error/i)) {
+            syntaxErrorDetected = true;
+            logger.error('Syntax error detected in generated code');
+          }
+
+          if (str.match(/Failed to compile|Build failed|compilation error/i)) {
+            buildErrorDetected = true;
+            logger.error('Build error detected');
+          }
+
+          if (str.match(/EADDRINUSE|port.*already in use/i)) {
+            portConflictDetected = true;
+            logger.warn('Port conflict detected');
           }
 
           // accumulate output for dev server detection
@@ -227,14 +246,23 @@ export class ActionRunner {
           );
           await installProcess.exit;
 
-          // Recursively retry the original command ONE time?
-          // To avoid infinite loops, we could pass a flag, but for now linear flow:
           logger.info('Auto-recovery complete. Retrying original command...');
-
-          // RE-IMPLEMENTATION for robustness:
           return this.#runShellAction(action);
-          // Wait! infinite loop risk if it keeps failing.
-          // We'll trust `npm install` works. The user will see loop if not.
+        }
+
+        // Log other error types for visibility
+        if (syntaxErrorDetected) {
+          logger.error(
+            'Syntax error in code - manual fix required or AI regeneration needed'
+          );
+        }
+
+        if (buildErrorDetected) {
+          logger.error('Build error detected - check generated code quality');
+        }
+
+        if (portConflictDetected) {
+          logger.warn('Port conflict - dev server may need manual restart');
         }
 
         throw error;
