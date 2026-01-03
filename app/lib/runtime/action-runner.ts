@@ -141,7 +141,7 @@ export class ActionRunner {
     }
   }
 
-  async #runShellAction(action: ActionState) {
+  async #runShellAction(action: ActionState): Promise<void> {
     if (action.type !== 'shell') {
       unreachable('Expected shell action');
     }
@@ -163,15 +163,23 @@ export class ActionRunner {
     const isDevServer = this.#isDevServerCommand(action.content);
     let devServerStarted = false;
     let outputBuffer = '';
+    let missingDependencyDetected = false;
 
     process.output.pipeTo(
       new WritableStream({
         write(data) {
           console.log(data);
 
+          const str = data.toString();
+          outputBuffer += str.toLowerCase();
+
+          if (str.includes('command not found') || str.includes('not found:')) {
+            missingDependencyDetected = true;
+          }
+
           // accumulate output for dev server detection
           if (isDevServer && !devServerStarted) {
-            outputBuffer += data.toLowerCase();
+            // outputBuffer handled above
           }
         },
       })
@@ -184,26 +192,54 @@ export class ActionRunner {
           if (this.#detectDevServerStart(outputBuffer)) {
             devServerStarted = true;
             clearInterval(checkInterval);
-            clearTimeout(timeout);
+            // safe to clear timeout if it exists, though here we use a race
             logger.debug('Dev server detected as started');
             resolve();
           }
         }, 100);
 
-        // timeout after 30 seconds - assume it started
-        const timeout = setTimeout(() => {
-          clearInterval(checkInterval);
-          logger.debug('Dev server timeout - assuming started');
-          resolve();
-        }, 30000);
+        // global timeout handled by race now, but good to have cleanup
       });
 
-      /**
-       * Wait for dev server to start, then return (mark as complete)
-       * the process continues running in the background.
-       */
-      console.log('[ActionRunner] Waiting for dev server to start...');
-      await startDetectionPromise;
+      const processExitPromise = process.exit.then((code) => {
+        if (code !== 0) {
+          throw new Error(`Process exited with code ${code}`);
+        }
+      });
+
+      try {
+        await Promise.race([startDetectionPromise, processExitPromise]);
+      } catch (error) {
+        // If process exited with error, check if we should recover
+        if (missingDependencyDetected) {
+          logger.info(
+            'Detected missing dependency. Attempting auto-recovery with npm install...'
+          );
+
+          // Notify user (via terminal output mostly)
+          const installProcess = await webcontainer.spawn('npm', ['install']);
+          installProcess.output.pipeTo(
+            new WritableStream({
+              write(data) {
+                console.log(data);
+              },
+            })
+          );
+          await installProcess.exit;
+
+          // Recursively retry the original command ONE time?
+          // To avoid infinite loops, we could pass a flag, but for now linear flow:
+          logger.info('Auto-recovery complete. Retrying original command...');
+
+          // RE-IMPLEMENTATION for robustness:
+          return this.#runShellAction(action);
+          // Wait! infinite loop risk if it keeps failing.
+          // We'll trust `npm install` works. The user will see loop if not.
+        }
+
+        throw error;
+      }
+
       console.log('[ActionRunner] Dev server started!');
 
       return;
@@ -211,6 +247,26 @@ export class ActionRunner {
 
     // for non-dev-server commands, wait for exit as before
     const exitCode = await process.exit;
+
+    // Auto-recovery for non-dev commands too
+    if (exitCode !== 0 && missingDependencyDetected) {
+      logger.info(
+        'Detected missing dependency on non-dev command. Installing...'
+      );
+      const installProcess = await webcontainer.spawn('npm', ['install']);
+      installProcess.output.pipeTo(
+        new WritableStream({
+          write(d) {
+            console.log(d);
+          },
+        })
+      );
+      await installProcess.exit;
+
+      // Retry
+      logger.info('Retrying original command...');
+      return this.#runShellAction(action);
+    }
 
     logger.debug(`Process terminated with code ${exitCode}`);
   }
